@@ -32,40 +32,36 @@ public class SpecialityController {
   @PostMapping("/create")
   public ResponseEntity<SpecialityResp> createSpeciality(@RequestBody @Valid SpecialityReq specialityReq){
     final Speciality speciality = SpecialityMapper.toSpeciality(specialityReq);
-    final Speciality savedSpeciality = specialityService.createSpeciality(speciality);
-    final SpecialityResp specialityResp = SpecialityMapper.toResp(savedSpeciality);
+    final SpecialityResp specialityResp = SpecialityMapper.toResp(specialityService.create(speciality));
     return new ResponseEntity<>(specialityResp, HttpStatus.CREATED);
   }
 
   @PutMapping("/update")
   public ResponseEntity<SpecialityResp> updateSpeciality(@RequestBody @Valid SpecialityReq specialityReq){
     final Speciality speciality = SpecialityMapper.toSpeciality(specialityReq);
-    final Speciality updatedSpeciality = specialityService.updateSpeciality(speciality);
-    final SpecialityResp specialityResp = SpecialityMapper.toResp(updatedSpeciality);
+    final SpecialityResp specialityResp = SpecialityMapper.toResp(specialityService.update(speciality));
     return new ResponseEntity<>(specialityResp, HttpStatus.OK);
   }
 
   @GetMapping("{specialityId}")
   public ResponseEntity<SpecialityResp> getSpeciality(@PathVariable @NotNull(message = "empty specialityId") Long specialityId){
-    final Speciality speciality = specialityService.getSpeciality(specialityId);
-    final SpecialityResp specialityResp = SpecialityMapper.toResp(speciality);
+    final SpecialityResp specialityResp = SpecialityMapper.toResp(specialityService.find(specialityId));
     return new ResponseEntity<>(specialityResp, HttpStatus.OK);
   }
 
   @GetMapping
-  public ResponseEntity<List<SpecialityResp>> getAllSpecialities(){
-    final List<Speciality> specialities = specialityService.getAllSpecialities();
-    final List<SpecialityResp> specialitiesResp = SpecialityMapper.toSpecialitiesResps(specialities);
+  public ResponseEntity<List<SpecialityResp>> getAllSpecialities(){;
+    final List<SpecialityResp> specialitiesResp = SpecialityMapper.toSpecialitiesResps(specialityService.findAll());
     return new ResponseEntity<>(specialitiesResp, HttpStatus.OK);
   }
   @DeleteMapping("{specialityId}")
   public ResponseEntity<?> deleteSpeciality(@PathVariable @NotNull(message = "empty specialityId") Long specialityId){
 
-    final Speciality speciality = specialityService.getSpeciality(specialityId);
+    final Speciality speciality = specialityService.find(specialityId);
     if(speciality == null)
       return new ResponseEntity<>("Speciality not found", HttpStatus.NOT_FOUND);
 
-    specialityService.deleteSpeciality(specialityId);
+    specialityService.delete(specialityId);
 
     return new ResponseEntity<>("Speciality deleted", HttpStatus.OK);
   }

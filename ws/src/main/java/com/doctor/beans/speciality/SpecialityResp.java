@@ -6,32 +6,14 @@
 package com.doctor.beans.speciality;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import lombok.*;
-
+import lombok.Builder;
 import java.time.LocalDateTime;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Setter
-@Getter
+
 @Builder
-public class SpecialityResp {
-
-  private Long specialityId;
-  private String name;
-  private String description;
-
-  @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
-  @JsonSerialize(using = LocalDateTimeSerializer.class)
-  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-  private LocalDateTime creationDate;
-
-  @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
-  @JsonSerialize(using = LocalDateTimeSerializer.class)
-  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-  private LocalDateTime modificationDate;
+public record  SpecialityResp (Long specialityId,
+                               String name,
+                               String description,
+                               @JsonFormat(pattern = "dd/MM/yyyy HH:mm") LocalDateTime creationDate,
+                               @JsonFormat(pattern = "dd/MM/yyyy HH:mm") LocalDateTime modificationDate){
 }

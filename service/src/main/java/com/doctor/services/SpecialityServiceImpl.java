@@ -20,13 +20,13 @@ public class SpecialityServiceImpl  implements SpecialityService{
   private SpecialityRepository specialityRepository;
 
   @Override
-  public Speciality createSpeciality(Speciality speciality) {
+  public Speciality create(Speciality speciality) {
     final Speciality savedSpeciality = specialityRepository.save(speciality);
     return savedSpeciality;
   }
 
   @Override
-  public Speciality updateSpeciality(Speciality speciality) {
+  public Speciality update(Speciality speciality) {
 
     final Long specialityId = speciality.getSpecialityId();
     if (specialityId == null) {
@@ -50,18 +50,18 @@ public class SpecialityServiceImpl  implements SpecialityService{
   }
 
   @Override
-  public Speciality getSpeciality(Long specialityId) {
+  public Speciality find(Long specialityId) {
     final Optional<Speciality> speciality = specialityRepository.findById(specialityId);
     return speciality.orElse(null);
   }
 
   @Override
-  public List<Speciality> getAllSpecialities() {
+  public List<Speciality> findAll() {
     return specialityRepository.findAll();
   }
 
   @Override
-  public void deleteSpeciality(Long specialityId){
+  public void delete(Long specialityId){
     specialityRepository.deleteById(specialityId);
 
   }

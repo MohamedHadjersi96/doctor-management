@@ -17,9 +17,9 @@ public class SpecialityMapper {
   public static Speciality toSpeciality(SpecialityReq specialityReq){
 
     return Speciality.builder()
-            .specialityId(specialityReq.getSpecialityId())
-            .name(specialityReq.getName())
-            .description(specialityReq.getDescription())
+            .specialityId(specialityReq.specialityId())
+            .name(specialityReq.name())
+            .description(specialityReq.description())
             .build();
   }
 

@@ -11,11 +11,11 @@ import java.util.List;
 
 public interface SpecialityService {
 
-  public Speciality createSpeciality(Speciality speciality);
-  public Speciality updateSpeciality(Speciality speciality);
-  public Speciality getSpeciality(Long specialityId);
-  public List<Speciality> getAllSpecialities();
-  public void deleteSpeciality(Long specialityId);
+  public Speciality create(Speciality speciality);
+  public Speciality update(Speciality speciality);
+  public Speciality find(Long specialityId);
+  public List<Speciality> findAll();
+  public void delete(Long specialityId);
 
 
 }
