@@ -8,5 +8,5 @@ package com.doctor.services;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ConsultationServiceImpl implements ConsultationService{
+public class ConsultationServiceImpl {
 }

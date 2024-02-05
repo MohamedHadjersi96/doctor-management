@@ -8,5 +8,5 @@ package com.doctor.services;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MedicalFileServiceImpl implements MedicalFileService{
+public class MedicalFileServiceImpl {
 }
