@@ -8,15 +8,16 @@ package com.doctor.controllers;
 
 import com.doctor.beans.speciality.SpecialityReq;
 import com.doctor.beans.speciality.SpecialityResp;
-import com.doctor.entities.Speciality;
-import com.doctor.mappers.SpecialityMapper;
+import com.doctor.services.SpecialityService;
 import jakarta.validation.Valid;
+import jakarta.validation.ValidationException;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -26,42 +27,44 @@ import java.util.List;
 @RequestMapping("api/v1/speciality")
 public class SpecialityController {
 
-  private SpecialityService specialityService;
+    private SpecialityService specialityService;
 
-  @PostMapping("/create")
-  public ResponseEntity<SpecialityResp> createSpeciality(@RequestBody @Valid SpecialityReq specialityReq){
-    final Speciality speciality = SpecialityMapper.toSpeciality(specialityReq);
-    final SpecialityResp specialityResp = SpecialityMapper.toResp(specialityService.create(speciality));
-    return new ResponseEntity<>(specialityResp, HttpStatus.CREATED);
-  }
+    @PostMapping("/create")
+    public ResponseEntity<Void> create(@RequestBody @Valid SpecialityReq specialityReq, UriComponentsBuilder uriBuilder) {
+        final var specialityResp = specialityService.create(specialityReq);
+        String uriString = uriBuilder.path("api/v1/speciality/{id}").buildAndExpand(specialityResp.specialityId()).toUriString();
 
-  @PutMapping("/update")
-  public ResponseEntity<SpecialityResp> updateSpeciality(@RequestBody @Valid SpecialityReq specialityReq){
-    final Speciality speciality = SpecialityMapper.toSpeciality(specialityReq);
-    final SpecialityResp specialityResp = SpecialityMapper.toResp(specialityService.update(speciality));
-    return new ResponseEntity<>(specialityResp, HttpStatus.OK);
-  }
+//    return new ResponseEntity<>(specialityResp, HttpStatus.CREATED);
+        return ResponseEntity.created(UriComponentsBuilder.fromUriString(uriString).build().toUri()).build();
+    }
 
-  @GetMapping("{specialityId}")
-  public ResponseEntity<SpecialityResp> getSpeciality(@PathVariable @NotNull(message = "empty specialityId") Long specialityId){
-    final SpecialityResp specialityResp = SpecialityMapper.toResp(specialityService.find(specialityId));
-    return new ResponseEntity<>(specialityResp, HttpStatus.OK);
-  }
+    @PutMapping("/update")
+    public ResponseEntity<SpecialityResp> update(@RequestBody @Valid SpecialityReq specialityReq) {
+        final SpecialityResp specialityResp = specialityService.update(specialityReq);
+        return new ResponseEntity<>(specialityResp, HttpStatus.OK);
+    }
 
-  @GetMapping
-  public ResponseEntity<List<SpecialityResp>> getAllSpecialities(){;
-    final List<SpecialityResp> specialitiesResp = SpecialityMapper.toSpecialitiesResps(specialityService.findAll());
-    return new ResponseEntity<>(specialitiesResp, HttpStatus.OK);
-  }
-  @DeleteMapping("{specialityId}")
-  public ResponseEntity<?> deleteSpeciality(@PathVariable @NotNull(message = "empty specialityId") Long specialityId){
+    @GetMapping("{id}")
+    public ResponseEntity<SpecialityResp> get(@PathVariable @NotNull(message = "empty id") Long id) {
+        final SpecialityResp specialityResp = specialityService.find(id);
+        return new ResponseEntity<>(specialityResp, HttpStatus.OK);
+    }
 
-    final Speciality speciality = specialityService.find(specialityId);
-    if(speciality == null)
-      return new ResponseEntity<>("Speciality not found", HttpStatus.NOT_FOUND);
+    @GetMapping
+    public ResponseEntity<List<SpecialityResp>> getAll() {
+        final List<SpecialityResp> specialitiesResp = specialityService.findAll();
+        return new ResponseEntity<>(specialitiesResp, HttpStatus.OK);
+    }
 
-    specialityService.delete(specialityId);
+    @DeleteMapping("{specialityId}")
+    public ResponseEntity<?> delete(@PathVariable @NotNull(message = "empty specialityId") Long specialityId) {
+        try {
+            specialityService.delete(specialityId);
+            return new ResponseEntity<>("Speciality deleted", HttpStatus.OK);
+            // ici on doit créer une autre exception validation exception par exemple
+        } catch (Exception e) {
+            return new ResponseEntity<>("Speciality with id " + specialityId + " not found", HttpStatus.NOT_FOUND);
+        }
 
-    return new ResponseEntity<>("Speciality deleted", HttpStatus.OK);
-  }
+    }
 }

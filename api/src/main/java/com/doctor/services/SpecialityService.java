@@ -5,16 +5,19 @@
 
 package com.doctor.services;
 
-import com.doctor.entities.Speciality;
+
+
+import com.doctor.beans.speciality.SpecialityReq;
+import com.doctor.beans.speciality.SpecialityResp;
 
 import java.util.List;
 
 public interface SpecialityService {
 
-  public Speciality create(Speciality speciality);
-  public Speciality update(Speciality speciality);
-  public Speciality find(Long specialityId);
-  public List<Speciality> findAll();
+  public SpecialityResp create(SpecialityReq req);
+  public SpecialityResp update(SpecialityReq req);
+  public SpecialityResp find(Long specialityId);
+  public List<SpecialityResp> findAll();
   public void delete(Long specialityId);
 
 

@@ -24,6 +24,7 @@ public class Speciality {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  //créer une séquence
   private Long specialityId;
   private String name;
   private String description;

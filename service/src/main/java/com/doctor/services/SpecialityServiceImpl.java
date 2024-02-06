@@ -5,7 +5,12 @@
 
 package com.doctor.services;
 
+import com.doctor.beans.speciality.SpecialityReq;
+import com.doctor.beans.speciality.SpecialityResp;
 import com.doctor.entities.Speciality;
+import com.doctor.mapper.Mapper;
+import com.doctor.mapper.MapperPatten;
+import com.doctor.mapper.SpecialityMapper;
 import com.doctor.repositories.SpecialityRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,50 +24,36 @@ public class SpecialityServiceImpl  implements SpecialityService{
   @Autowired
   private SpecialityRepository specialityRepository;
 
+  @Autowired
+  private Mapper<Speciality, SpecialityReq, SpecialityResp> mapper;
+
   @Override
-  public Speciality create(Speciality speciality) {
-    final Speciality savedSpeciality = specialityRepository.save(speciality);
-    return savedSpeciality;
+  public SpecialityResp create(SpecialityReq specialityReq) {
+      return mapper.mapToResponse(specialityRepository.save(mapper.mapToEntity(specialityReq, MapperPatten.CREATE)));
   }
 
   @Override
-  public Speciality update(Speciality speciality) {
+  public SpecialityResp update(SpecialityReq specialityReq) {
 
-    final Long specialityId = speciality.getSpecialityId();
+    final var specialityId = specialityReq.specialityId();
     if (specialityId == null) {
       throw new IllegalArgumentException("Cannot update an entity without an ID");
     }
-
-    final Optional<Speciality> existingSpecialityOptional = specialityRepository.findById(specialityId);
-    if (existingSpecialityOptional.isPresent()) {
-      final Speciality existingSpeciality = existingSpecialityOptional.get();
-
-      existingSpeciality.setName(speciality.getName());
-      existingSpeciality.setDescription(speciality.getDescription());
-
-      final Speciality savedSpeciality = specialityRepository.save(existingSpeciality);
-
-      return savedSpeciality;
-    } else {
-      throw new EntityNotFoundException("Speciality with ID " + specialityId + " not found");
-    }
-
+    return mapper.mapToResponse(specialityRepository.save(mapper.mapToEntity(specialityReq, MapperPatten.UPDATE)));
   }
 
   @Override
-  public Speciality find(Long specialityId) {
-    final Optional<Speciality> speciality = specialityRepository.findById(specialityId);
-    return speciality.orElse(null);
+  public SpecialityResp find(Long specialityId) {
+    return mapper.mapToResponse(specialityRepository.findById(specialityId).orElse(null));
   }
 
   @Override
-  public List<Speciality> findAll() {
-    return specialityRepository.findAll();
+  public List<SpecialityResp> findAll() {
+        return specialityRepository.findAll().stream().map(mapper::mapToResponse).toList();
   }
 
   @Override
   public void delete(Long specialityId){
     specialityRepository.deleteById(specialityId);
-
   }
 }

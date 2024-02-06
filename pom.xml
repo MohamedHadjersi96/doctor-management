@@ -60,6 +60,7 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+					<mainClass>com.doctor.Application</mainClass>
 				</configuration>
 			</plugin>
 
