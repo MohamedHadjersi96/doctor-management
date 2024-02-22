@@ -10,7 +10,6 @@ import com.doctor.beans.speciality.SpecialityReq;
 import com.doctor.beans.speciality.SpecialityResp;
 import com.doctor.services.SpecialityService;
 import jakarta.validation.Valid;
-import jakarta.validation.ValidationException;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -58,13 +57,8 @@ public class SpecialityController {
 
     @DeleteMapping("{specialityId}")
     public ResponseEntity<?> delete(@PathVariable @NotNull(message = "empty specialityId") Long specialityId) {
-        try {
-            specialityService.delete(specialityId);
-            return new ResponseEntity<>("Speciality deleted", HttpStatus.OK);
-            // ici on doit créer une autre exception validation exception par exemple
-        } catch (Exception e) {
-            return new ResponseEntity<>("Speciality with id " + specialityId + " not found", HttpStatus.NOT_FOUND);
-        }
 
+        specialityService.delete(specialityId);
+        return new ResponseEntity<>("Speciality deleted", HttpStatus.OK);
     }
 }

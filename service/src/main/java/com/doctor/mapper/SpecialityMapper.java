@@ -8,8 +8,6 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
 @Component
 public class SpecialityMapper implements Mapper <Speciality, SpecialityReq, SpecialityResp> {
 
@@ -18,7 +16,7 @@ public class SpecialityMapper implements Mapper <Speciality, SpecialityReq, Spec
 
     @Override
     public Speciality mapToEntity(SpecialityReq request, MapperPatten pattern) {
-    //il nous manque une couche validation (ex : objet avec clé fonctionnelle si il existe on ne doit pas créer
+    //il nous manque une couche validation (ex : objet avec clé fonctionnelle s'il existe on ne doit pas créer
     // mais lancer une 400 au niveau du controleur)
 
         if(MapperPatten.CREATE == pattern){

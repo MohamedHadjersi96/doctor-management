@@ -8,11 +8,11 @@ package com.doctor.services;
 import com.doctor.beans.speciality.SpecialityReq;
 import com.doctor.beans.speciality.SpecialityResp;
 import com.doctor.entities.Speciality;
+import com.doctor.exceptions.ResourceNotFoundException;
+import com.doctor.exceptions.SpecialityAlreadyExistException;
 import com.doctor.mapper.Mapper;
 import com.doctor.mapper.MapperPatten;
-import com.doctor.mapper.SpecialityMapper;
 import com.doctor.repositories.SpecialityRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,22 +29,25 @@ public class SpecialityServiceImpl  implements SpecialityService{
 
   @Override
   public SpecialityResp create(SpecialityReq specialityReq) {
+
+    final Optional speciality = specialityRepository.findByName(specialityReq.name());
+    if(speciality.isPresent()){
+      throw new SpecialityAlreadyExistException("Speciality name "+specialityReq.name()+" Already Exists");
+    }
       return mapper.mapToResponse(specialityRepository.save(mapper.mapToEntity(specialityReq, MapperPatten.CREATE)));
   }
 
   @Override
   public SpecialityResp update(SpecialityReq specialityReq) {
 
-    final var specialityId = specialityReq.specialityId();
-    if (specialityId == null) {
-      throw new IllegalArgumentException("Cannot update an entity without an ID");
-    }
+    this.validateSpeciality(specialityReq.specialityId());
     return mapper.mapToResponse(specialityRepository.save(mapper.mapToEntity(specialityReq, MapperPatten.UPDATE)));
   }
 
   @Override
   public SpecialityResp find(Long specialityId) {
-    return mapper.mapToResponse(specialityRepository.findById(specialityId).orElse(null));
+    final Speciality speciality = this.validateSpeciality(specialityId);
+    return mapper.mapToResponse(speciality);
   }
 
   @Override
@@ -54,6 +57,15 @@ public class SpecialityServiceImpl  implements SpecialityService{
 
   @Override
   public void delete(Long specialityId){
+
+    this.validateSpeciality(specialityId);
     specialityRepository.deleteById(specialityId);
+  }
+
+  private Speciality  validateSpeciality(Long specialityId){
+    return specialityRepository.findById(specialityId)
+            .orElseThrow(()->
+                    new ResourceNotFoundException("Speciality", "id", specialityId, "SPECIALITY_NOT_FOUND"));
+
   }
 }
