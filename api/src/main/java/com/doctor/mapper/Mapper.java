@@ -7,6 +7,6 @@ package com.doctor.mapper;
  * @param <I> Response
  */
 public interface Mapper<T, V, I> {
-    T mapToEntity(V request, MapperPatten pattern);
+    T mapToEntity(V request, MapperPattern pattern);
     I mapToResponse(T entity);
 }

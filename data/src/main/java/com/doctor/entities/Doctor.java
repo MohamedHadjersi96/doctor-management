@@ -4,6 +4,8 @@
  */
 package com.doctor.entities;
 
+import com.doctor.beans.Address;
+import com.doctor.enumerations.Gender;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -31,13 +33,17 @@ public class Doctor {
   @JoinColumn(name = "specialityId")
   private Speciality speciality;
 
-  private String name;
+  private String lastName;
   private String firstName;
   private String phoneNumber;
   private LocalDate birthDate;
-  private String gender;
+
+  @Enumerated(EnumType.STRING)
+  private Gender gender;
+
   private String email;
-  private String adresse;
+  @Embedded
+  private Address address;
   private String socialSecurityNumber;
   @CreatedDate
   private LocalDateTime creationDate;

@@ -15,11 +15,11 @@ public class SpecialityMapper implements Mapper <Speciality, SpecialityReq, Spec
     private SpecialityRepository specialityRepository;
 
     @Override
-    public Speciality mapToEntity(SpecialityReq request, MapperPatten pattern) {
+    public Speciality mapToEntity(SpecialityReq request, MapperPattern pattern) {
     //il nous manque une couche validation (ex : objet avec clé fonctionnelle s'il existe on ne doit pas créer
     // mais lancer une 400 au niveau du controleur)
 
-        if(MapperPatten.CREATE == pattern){
+        if(MapperPattern.CREATE == pattern){
             return Speciality.builder()
                     .name(request.name())
                     .description(request.description())

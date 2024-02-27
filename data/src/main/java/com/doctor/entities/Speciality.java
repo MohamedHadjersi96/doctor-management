@@ -11,6 +11,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -28,6 +29,10 @@ public class Speciality {
   private Long specialityId;
   private String name;
   private String description;
+
+  @OneToMany(mappedBy = "speciality")
+  private List<Doctor> doctors;
+
   @CreatedDate
   private LocalDateTime creationDate;
   @LastModifiedDate

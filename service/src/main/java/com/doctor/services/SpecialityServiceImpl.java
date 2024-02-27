@@ -8,10 +8,11 @@ package com.doctor.services;
 import com.doctor.beans.speciality.SpecialityReq;
 import com.doctor.beans.speciality.SpecialityResp;
 import com.doctor.entities.Speciality;
+import com.doctor.exceptions.DoctorAlreadyExistException;
 import com.doctor.exceptions.ResourceNotFoundException;
 import com.doctor.exceptions.SpecialityAlreadyExistException;
 import com.doctor.mapper.Mapper;
-import com.doctor.mapper.MapperPatten;
+import com.doctor.mapper.MapperPattern;
 import com.doctor.repositories.SpecialityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,18 +31,18 @@ public class SpecialityServiceImpl  implements SpecialityService{
   @Override
   public SpecialityResp create(SpecialityReq specialityReq) {
 
-    final Optional speciality = specialityRepository.findByName(specialityReq.name());
-    if(speciality.isPresent()){
-      throw new SpecialityAlreadyExistException("Speciality name "+specialityReq.name()+" Already Exists");
-    }
-      return mapper.mapToResponse(specialityRepository.save(mapper.mapToEntity(specialityReq, MapperPatten.CREATE)));
+    specialityRepository.findByName(specialityReq.name())
+            .ifPresent(existingSpeciality -> {
+              throw new SpecialityAlreadyExistException("Speciality name " + specialityReq.name() + " Already Exists");
+            });
+    return mapper.mapToResponse(specialityRepository.save(mapper.mapToEntity(specialityReq, MapperPattern.CREATE)));
   }
 
   @Override
   public SpecialityResp update(SpecialityReq specialityReq) {
 
     this.validateSpeciality(specialityReq.specialityId());
-    return mapper.mapToResponse(specialityRepository.save(mapper.mapToEntity(specialityReq, MapperPatten.UPDATE)));
+    return mapper.mapToResponse(specialityRepository.save(mapper.mapToEntity(specialityReq, MapperPattern.UPDATE)));
   }
 
   @Override

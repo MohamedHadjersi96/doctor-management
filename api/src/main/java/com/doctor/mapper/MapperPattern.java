@@ -1,5 +1,5 @@
 package com.doctor.mapper;
 
-public enum MapperPatten {
+public enum MapperPattern {
 CREATE, UPDATE;
 }

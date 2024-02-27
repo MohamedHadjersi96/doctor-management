@@ -12,6 +12,7 @@ import com.doctor.services.SpecialityService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -26,6 +27,7 @@ import java.util.List;
 @RequestMapping("api/v1/speciality")
 public class SpecialityController {
 
+    @Autowired
     private SpecialityService specialityService;
 
     @PostMapping("/create")
@@ -43,9 +45,9 @@ public class SpecialityController {
         return new ResponseEntity<>(specialityResp, HttpStatus.OK);
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<SpecialityResp> get(@PathVariable @NotNull(message = "empty id") Long id) {
-        final SpecialityResp specialityResp = specialityService.find(id);
+    @GetMapping("{specialityId}")
+    public ResponseEntity<SpecialityResp> get(@PathVariable("specialityId") @NotNull(message = "empty id") Long specialityId) {
+        final SpecialityResp specialityResp = specialityService.find(specialityId);
         return new ResponseEntity<>(specialityResp, HttpStatus.OK);
     }
 
@@ -56,7 +58,7 @@ public class SpecialityController {
     }
 
     @DeleteMapping("{specialityId}")
-    public ResponseEntity<?> delete(@PathVariable @NotNull(message = "empty specialityId") Long specialityId) {
+    public ResponseEntity<?> delete(@PathVariable("specialityId") @NotNull(message = "empty specialityId") Long specialityId) {
 
         specialityService.delete(specialityId);
         return new ResponseEntity<>("Speciality deleted", HttpStatus.OK);
