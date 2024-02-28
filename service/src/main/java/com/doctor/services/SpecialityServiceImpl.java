@@ -5,10 +5,11 @@
 
 package com.doctor.services;
 
+import com.doctor.beans.doctor.DoctorResp;
 import com.doctor.beans.speciality.SpecialityReq;
 import com.doctor.beans.speciality.SpecialityResp;
+import com.doctor.entities.Doctor;
 import com.doctor.entities.Speciality;
-import com.doctor.exceptions.DoctorAlreadyExistException;
 import com.doctor.exceptions.ResourceNotFoundException;
 import com.doctor.exceptions.SpecialityAlreadyExistException;
 import com.doctor.mapper.Mapper;
@@ -18,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class SpecialityServiceImpl  implements SpecialityService{
@@ -27,6 +27,9 @@ public class SpecialityServiceImpl  implements SpecialityService{
 
   @Autowired
   private Mapper<Speciality, SpecialityReq, SpecialityResp> mapper;
+
+  @Autowired
+  private Mapper<Doctor, ?, DoctorResp> doctorMapper;
 
   @Override
   public SpecialityResp create(SpecialityReq specialityReq) {
@@ -61,6 +64,16 @@ public class SpecialityServiceImpl  implements SpecialityService{
 
     this.validateSpeciality(specialityId);
     specialityRepository.deleteById(specialityId);
+  }
+
+  @Override
+  public List<DoctorResp> findDoctorsBySpeciality(Long specialityId) {
+    final Speciality speciality = this.validateSpeciality(specialityId);
+
+    return speciality.getDoctors()
+            .stream()
+            .map(doctor -> doctorMapper.mapToResponse(doctor))
+            .toList();
   }
 
   private Speciality  validateSpeciality(Long specialityId){

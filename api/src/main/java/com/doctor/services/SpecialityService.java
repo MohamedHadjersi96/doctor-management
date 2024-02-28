@@ -7,6 +7,7 @@ package com.doctor.services;
 
 
 
+import com.doctor.beans.doctor.DoctorResp;
 import com.doctor.beans.speciality.SpecialityReq;
 import com.doctor.beans.speciality.SpecialityResp;
 
@@ -14,11 +15,13 @@ import java.util.List;
 
 public interface SpecialityService {
 
-  public SpecialityResp create(SpecialityReq req);
-  public SpecialityResp update(SpecialityReq req);
-  public SpecialityResp find(Long specialityId);
-  public List<SpecialityResp> findAll();
-  public void delete(Long specialityId);
+  SpecialityResp create(SpecialityReq req);
+  SpecialityResp update(SpecialityReq req);
+  SpecialityResp find(Long specialityId);
+  List<SpecialityResp> findAll();
+  void delete(Long specialityId);
+
+  List<DoctorResp> findDoctorsBySpeciality(Long specialityId);
 
 
 }

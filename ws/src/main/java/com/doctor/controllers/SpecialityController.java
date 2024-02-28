@@ -6,6 +6,7 @@
 package com.doctor.controllers;
 
 
+import com.doctor.beans.doctor.DoctorResp;
 import com.doctor.beans.speciality.SpecialityReq;
 import com.doctor.beans.speciality.SpecialityResp;
 import com.doctor.services.SpecialityService;
@@ -55,6 +56,12 @@ public class SpecialityController {
     public ResponseEntity<List<SpecialityResp>> getAll() {
         final List<SpecialityResp> specialitiesResp = specialityService.findAll();
         return new ResponseEntity<>(specialitiesResp, HttpStatus.OK);
+    }
+
+    @GetMapping("/doctors/{specialityId}")
+    public ResponseEntity<List<DoctorResp>> getDoctorsBySpeciality(@PathVariable("specialityId") @NotNull(message = "empty id") Long specialityId) {
+        final List<DoctorResp> doctorsResp = specialityService.findDoctorsBySpeciality(specialityId);
+        return new ResponseEntity<>(doctorsResp, HttpStatus.OK);
     }
 
     @DeleteMapping("{specialityId}")
