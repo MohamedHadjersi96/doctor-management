@@ -8,7 +8,7 @@ package com.doctor.services;
 import com.doctor.beans.patient.PatientReq;
 import com.doctor.beans.patient.PatientResp;
 import com.doctor.entities.Patient;
-import com.doctor.exceptions.DoctorAlreadyExistException;
+import com.doctor.exceptions.PatientAlreadyExistException;
 import com.doctor.exceptions.ResourceNotFoundException;
 import com.doctor.mapper.Mapper;
 import com.doctor.mapper.MapperPattern;
@@ -31,7 +31,7 @@ public class PatientServiceImpl implements PatientService {
   public PatientResp create(PatientReq patientReq) {
     patientRepository.findByEmail(patientReq.email())
             .ifPresent(existingSpeciality -> {
-              throw new DoctorAlreadyExistException("Doctor email " + patientReq.email() + " Already Exists");
+              throw new PatientAlreadyExistException("Patient email " + patientReq.email() + " Already Exists");
             });
     return mapper.mapToResponse(patientRepository.save(mapper.mapToEntity(patientReq, MapperPattern.CREATE)));
   }
