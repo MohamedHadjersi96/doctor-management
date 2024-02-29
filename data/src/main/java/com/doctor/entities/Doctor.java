@@ -32,15 +32,12 @@ public class Doctor {
   @ManyToOne
   @JoinColumn(name = "specialityId")
   private Speciality speciality;
-
   private String lastName;
   private String firstName;
   private String phoneNumber;
   private LocalDate birthDate;
-
   @Enumerated(EnumType.STRING)
   private Gender gender;
-
   private String email;
   @Embedded
   private Address address;

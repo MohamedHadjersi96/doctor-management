@@ -50,13 +50,13 @@ public class DoctorController {
 
   @GetMapping("/speciality/{specialityId}")
   public  ResponseEntity<List<DoctorResp>> getDoctorBySpeciality(@PathVariable("specialityId") @NotNull(message = "empty specialityId") Long specialityId) {
-    final List<DoctorResp> specialitiesResp = doctorService.findBySpeciality(specialityId);
-    return new ResponseEntity<>(specialitiesResp, HttpStatus.OK);
+    final List<DoctorResp> doctorsResp = doctorService.findBySpeciality(specialityId);
+    return new ResponseEntity<>(doctorsResp, HttpStatus.OK);
   }
   @GetMapping
   public ResponseEntity<List<DoctorResp>> getAll() {
-    final List<DoctorResp> specialitiesResp = doctorService.findAll();
-    return new ResponseEntity<>(specialitiesResp, HttpStatus.OK);
+    final List<DoctorResp> doctorsResp = doctorService.findAll();
+    return new ResponseEntity<>(doctorsResp, HttpStatus.OK);
   }
 
   @DeleteMapping("{doctorId}")

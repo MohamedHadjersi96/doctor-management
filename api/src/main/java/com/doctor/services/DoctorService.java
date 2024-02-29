@@ -11,10 +11,10 @@ import java.util.List;
 
 public interface DoctorService {
 
-  public DoctorResp create(DoctorReq req);
-  public DoctorResp update(DoctorReq req);
-  public DoctorResp find(Long doctorId);
-  public List<DoctorResp> findAll();
-  public void delete(Long doctorId);
-  public List<DoctorResp> findBySpeciality(Long specialityId);
+  DoctorResp create(DoctorReq req);
+  DoctorResp update(DoctorReq req);
+  DoctorResp find(Long doctorId);
+  List<DoctorResp> findAll();
+  void delete(Long doctorId);
+  List<DoctorResp> findBySpeciality(Long specialityId);
 }
